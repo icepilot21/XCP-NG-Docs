@@ -1,9 +1,7 @@
 # XCP-NG
 
 ## Virtual Machine Migration
-Virtual Machines can be migrated from a variety of sources. The vendor docs can be found here but I found that they were slightly lacking
-
-[Migrate to XCP-NG](https://xcp-ng.org/docs/migratetoxcpng.html)
+Virtual Machines can be migrated from a variety of sources. The vendor docs can be found at [Migrate to XCP-NG](https://xcp-ng.org/docs/migratetoxcpng.html) but I found that they were slightly lacking
 
 ### KVM/QEMU/PROXMOX to XCP-NG
 #### **On each Source VM**
@@ -33,7 +31,7 @@ Update the VM to include needed dracut tools to support migration to XCP-NG
     - `cd /location/where/virtual/discs/are/stored`
     - `qemu-img convert -O vpc myvm.qcow2 myvm.vhd`
 
->**Note:** <span style="color:red">This will make a copy of the source Virtual Disk so ensure you have enough disk space</span>
+>**Note:** This will make a copy of the source Virtual Disk so ensure you have enough disk space
 
 - Copy the new VHD file to the new XCP-NG hypervisor
     - `rsync myvm.vhd root@10.10.10.10:/root/ --progress --sparse`
@@ -43,7 +41,7 @@ Update the VM to include needed dracut tools to support migration to XCP-NG
 - Complete the QEMU to XCP-NG VM conversion
     - `vhd-util repair -n myvm.vhd`
     - `vhd-util check -n myvm.vhd` this should return `myvm.vhd is valid`
->**Note:** <span style="color:red">If it does not start he conversion process over from the beginning</span>
+>**Note:** If it does not start he conversion process over from the beginning
 - Identify the UUID of the Storage Resource you want to run the VM from
     - `xe sr-list`
 ```
@@ -57,11 +55,11 @@ uuid ( RO)                : 3255b4c3-ff78-fce7-1ee0-4d351642bd27
 ```
 - Create an empty Virtual Disk Image (VDI)
     - `xe vdi-create sr-uuid=3255b4c3-ff78-fce7-1ee0-4d351642bd27 virtual-size=20000000 name-label=myvm`
->**Note:** <span style="color:red">Make the VDI with the virtual size of your VHD + 1GB (i.e the virtual size of myvm is 19GB, so create a VDI with a size of 20GB).</span>
+>**Note:** Make the VDI with the virtual size of your VHD + 1GB (i.e the virtual size of myvm is 19GB, so create a VDI with a size of 20GB).
 
->**Note:** <span style="color:red">The `virtual-size` filed is in Kilobytes</span>
+>**Note:** The `virtual-size` filed is in Kilobytes
 
->**Note:** <span style="color:red">Use the UUID of the SR you found in the provious step in the `sr-uuid` filed</span>
+>**Note:** Use the UUID of the SR you found in the provious step in the `sr-uuid` filed
 
 - Obtain the UUID of the VDI you just created
     - `xe vdi-list name-label=myvm`
@@ -80,5 +78,5 @@ uuid ( RO)                : b54f7d29-67d1-4f15-af27-2673a2dc4bce
 - Disable `Boot VM after creation` on the Advanced Tab
 - Delete the VM disk that has been created and attach your newly created VDI to the VM
     - This can be done via `Home > VMs > myvm > Disks`
->**Note:** <span style="color:red">Don't forget to set the VM boot mode to UEFI if your VMs was in UEFI mode. (Also Under Advanced)</span>
+>**Note:** Don't forget to set the VM boot mode to UEFI if your VMs was in UEFI mode. (Also Under Advanced)
 - Power on the VM
