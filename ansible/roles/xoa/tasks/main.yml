@@ -1,0 +1,58 @@
+---
+- name: Prelim Tasks
+  block:
+
+    - name: Install Dependencies
+      ansible.builtin.package:
+        name:
+          - git
+          - vim
+        state: present
+
+  tags:
+    - always
+
+- name: Install Xen Orchestra Appliance
+  block:
+
+    - name: Add HTTPS Firewall Rule
+      ansible.posix.firewalld:
+        service: https
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Clone XenOrchestraInstallerUpdater Git Repo
+      ansible.builtin.git:
+        repo: https://github.com/ronivay/XenOrchestraInstallerUpdater.git
+        dest: '{{ gitrepo_path }}'
+        version: '{{ branch }}'
+
+    - name: Copy xo-install.cfg into XenOrchestraInstallerUpdater repo
+      ansible.builtin.template:
+        src: xo-install.cfg.j2
+        dest: '{{ gitrepo_path }}/xo-install.cfg'
+        owner: '{{ gitrepo_user }}'
+        group: '{{ gitrepo_group }}'
+        mode: '0664'
+
+    - name: Install Xen Orchestra Appliance
+      ansible.builtin.command: '{{ gitrepo_path }}/xo-install.sh --install'
+      async: 600
+      poll: 10
+
+  tags:
+    - never
+    - install
+
+- name: Install Xen Orchestra Appliance
+  block:
+
+    - name: Update Xen Orchestra Appliance
+      ansible.builtin.command: '{{ gitrepo_path }}/xo-install.sh --update'
+      async: 600
+      poll: 10
+
+  tags:
+    - never
+    - update

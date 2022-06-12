@@ -1,0 +1,23 @@
+---
+gitrepo_path: /root/XenOrchestraInstallerUpdater
+gitrepo_user: root
+gitrepo_group: root
+xouser: root
+usesudo: "false"
+gensudo: "false"
+xoa_port: 443
+installdir: /opt/xo
+selfupgrade: "true"
+configupdate: "true"
+repository: https://github.com/vatesfr/xen-orchestra
+branch: master
+logpath: ./logs
+plugins: all
+autoupdate: "true"
+os_check: "true"
+arch_check: "true"
+preserve: 3
+path_to_cert: $INSTALLDIR/xo.crt
+path_to_key: $INSTALLDIR/xo.key
+autocert: "true"
+install_repos: "true"

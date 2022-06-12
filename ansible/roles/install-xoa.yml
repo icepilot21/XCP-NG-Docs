@@ -1,0 +1,5 @@
+---
+- hosts: xoa
+  become: true
+  roles:
+    - {role: xoa}

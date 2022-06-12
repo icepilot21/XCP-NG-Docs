@@ -1,5 +1,60 @@
 # XCP-NG
 
+## Install XCP-NG
+
+## Install "Free" Xen Orchestra Appliance
+The Xen Orchestra Appliance provided through the base XCP-NG install will allow the user to create VMs and perform basic adminstrative capabilities, but it places a number a key capabilities behind a paywall.
+
+## Compile Xen Orchestra Appliance from Source
+This installation has been validated against a fresh Debian 11 (Bullseye) x64 install. It should be nearly the same on other dpkg systems. For RPM based OS's, it should be close, as most of our dependencies come from NPM and not the OS itself.
+
+### Create a Virtual Machine through the "Free" XOA
+#### Minimum Specs
+- 2 vCPU
+- 4GB Ram
+- 20GB Disk
+- Supported Operating Systems
+    - CentOS 8 Stream
+    - AlmaLinux 9
+    - AlmaLinux 8
+    - Rocky Linux 8
+    - Red Hat Enterprise Linux 8
+    - Debian 11
+    - Debian 10
+    - Debian 9
+    - Debian 8
+    - Ubuntu 22.04
+    - Ubuntu 20.04
+    - Ubuntu 18.04
+    - Ubuntu 16.04
+
+#### Install Git & Vim
+- Red Hat based Distros
+    - `sudo dnf -y install git vim`
+- Debian based Distros
+    - `sudo apt update && sudo apt -y upgrade && apt -y install git vim`
+
+#### Open Firewall Rules
+- Red Hat based Distros
+    - `sudo firewall-cmd --permanent --add-service={http,https}`
+
+#### Clone XenOrchestraInstallerUpdater Repo
+- `cd ~`
+- `git clone https://github.com/ronivay/XenOrchestraInstallerUpdater.git`
+- `cd XenOrchestraInstallerUpdater/`
+
+#### Install/Update Xen Orchestra Appliance
+- `cp sample.xo-install.cfg xo-install.cfg`
+- `vim xo-install.cfg` and change the following lines
+    - PORT="443"
+    - CONFIGUPDATE=true
+    - PATH_TO_HTTPS_CERT=$INSTALLDIR/xo.crt
+    - PATH_TO_HTTPS_KEY=$INSTALLDIR/xo.key
+    - AUTOCERT="true"
+- `sudo ./xo-install.sh`
+- `Answer 1` if you want to install
+- `Answer 2` if you want to update
+
 ## Virtual Machine Migration
 Virtual Machines can be migrated from a variety of sources. The vendor docs can be found at [Migrate to XCP-NG](https://xcp-ng.org/docs/migratetoxcpng.html) but I found that they were slightly lacking
 
