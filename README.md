@@ -69,10 +69,12 @@ Update the VM to include needed dracut tools to support migration to XCP-NG
         - `apt -y install dracut-config-generic dracut-network`
 - Execute Dracut Tools
     - `dracut --add-drivers xen-blkfront -f /boot/initramfs-$(uname -r).img $(uname -r)`
-    - BIOS based VMs
+    - Red Hat BIOS based VMs
         - `dracut --regenerate-all -f && grub2-mkconfig -o /boot/grub2/grub.cfg`
-    - UEFI based VMs
-        - `dracut --regenerate-all -f && grub2-mkconfig -o /boot/efi/EFI/<your distribution>/grub.cfg`
+    - Red HatUEFI based VMs
+        - `dracut --regenerate-all -f && grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg`
+    - Debian based VMs
+        - `dracut --regenerate-all -f && update-grub`
 - Shutdown the VM
 
 #### **On the current QEMU Hypervisor**
