@@ -81,7 +81,7 @@ Update the VM to include needed dracut tools to support migration to XCP-NG
 - SSH into the Hypervisor
 - Install QEMU Tools
     - Red Hat based Distros
-        - `dnf - y install qemu-img`
+        - `dnf -y install qemu-img`
     - Debian based Distros (Proxmox)
         - `apt -y install qemu-utils`
 - Convert QEMU compatible VM to XCP-NG compatible VM
@@ -111,7 +111,7 @@ uuid ( RO)                : 3255b4c3-ff78-fce7-1ee0-4d351642bd27
 
 ```
 - Create an empty Virtual Disk Image (VDI)
-    - `xe vdi-create sr-uuid=3255b4c3-ff78-fce7-1ee0-4d351642bd27 virtual-size=20000000 name-label=myvm`
+    - `xe vdi-create sr-uuid=3255b4c3-ff78-fce7-1ee0-4d351642bd27 virtual-size=20000000000 name-label=myvm`
 >**Note:** Make the VDI with the virtual size of your VHD + 1GB (i.e the virtual size of myvm is 19GB, so create a VDI with a size of 20GB).
 
 >**Note:** The `virtual-size` filed is in Kilobytes
