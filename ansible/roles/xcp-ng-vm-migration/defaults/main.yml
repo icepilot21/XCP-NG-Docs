@@ -1,0 +1,4 @@
+---
+uses_uefi: "{{ sys_firmware_efi.stat.exists }}"
+src_vm_path: /datastore/
+dest_vm_path: /root/

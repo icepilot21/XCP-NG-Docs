@@ -1,0 +1,23 @@
+---
+- name: Import Distribution Specific Variables
+  include_vars: '{{ ansible_os_family }}.yml'
+  tags:
+    - always
+
+- name: Prepare Source VMs
+  import_tasks: src_vm_prep.yml
+  tags:
+    - never
+    - prep_vm
+
+- name: Convert Source VMs
+  import_tasks: convert_vm.yml
+  tags:
+    - never
+    - convert_vm
+
+- name: Finalize Converted VM
+  import_tasks: finalize_vm.yml
+  tags:
+    - never
+    - finalize_vm

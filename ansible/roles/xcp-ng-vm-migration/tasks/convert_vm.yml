@@ -1,0 +1,34 @@
+---
+# - name: Install Conversion dependencies
+#   ansible.builtin.package:
+#     name: '{{ qemu_package }}'
+#     state: present
+
+- name: Identify list of VMs to Convert
+  ansible.builtin.find:
+    paths: "{{ src_vm_path }}"
+    patterns: '*.qcow2'
+    file_type: file
+    excludes: '*base*'
+  register: vm_find
+
+- name: Debug 1
+  ansible.builtin.debug:
+    msg: "{{ item.path | regex_search('/datastore/(.*)', '\\1') }} and {{ item.path | regex_search('/datastore/(.*).qcow2', '\\1') }}"
+  with_items: "{{ vm_find.files }}"
+
+- name: Set Variable Fact
+  ansible.builtin.set_fact:
+    src_filename: "{{ src_filename }} + [ '{{ item.path | regex_search('/datastore/(.*)', '\\1') }}' ]"
+    dest_filename: "{{ dest_filename }} + [ '{{ item.path | regex_search('/datastore/(.*).qcow2', '\\1') }}' ]"
+  with_items: "{{ vm_find.files }}"
+
+- name: Debug 2
+  ansible.builtin.debug:
+    var: src_filename
+    verbosity: 0
+
+- name: Debug 3
+  ansible.builtin.debug:
+    var: dest_filename
+    verbosity: 0

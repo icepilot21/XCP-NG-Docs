@@ -1,0 +1,45 @@
+---
+- name: Identify if the VM is using BIOS or UEFI
+  ansible.builtin.stat:
+    path: /sys/firmware/efi
+  register: sys_firmware_efi
+  tags:
+    - always
+
+- name: Install Dracut Dependencies
+  ansible.builtin.package:
+    name:
+      - dracut-config-generic
+      - dracut-network
+
+- name: Install Xen Drivers
+  ansible.builtin.shell: 'dracut --add-drivers xen-blkfront -f /boot/initramfs-$(uname -r).img $(uname -r)'
+  changed_when: false
+  async: 600
+  poll: 10
+
+- name: "Red Hat | Regenerate BIOS grub config"
+  ansible.builtin.shell: 'dracut --regenerate-all -f && grub2-mkconfig -o /boot/grub2/grub.cfg'
+  async: 600
+  poll: 10
+  when:
+    - not uses_uefi
+    - ansible_os_family == "RedHat"
+
+- name: "Red Hat | Regenerate EFI grub config"
+  ansible.builtin.shell: 'dracut --regenerate-all -f && grub2-mkconfig -o /boot/efi/EFI/{{ ansible_os_family | lower }}/grub.cfg'
+  async: 600
+  poll: 10
+  when:
+    - uses_uefi
+    - ansible_os_family == "RedHat"
+
+- name: "Debian | Regenerate grub config"
+  ansible.builtin.shell: 'dracut --regenerate-all -f && update-grub'
+  async: 600
+  poll: 10
+  when: ansible_os_family == "Debian"
+
+- name: Shutdown VM
+  community.general.shutdown:
+    delay: 10
