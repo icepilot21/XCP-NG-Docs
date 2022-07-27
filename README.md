@@ -55,6 +55,29 @@ This installation has been validated against a fresh Debian 11 (Bullseye) x64 in
 - `Answer 1` if you want to install
 - `Answer 2` if you want to update
 
+#### Post Installation
+### Install Guest Management Tools
+- Debian (Install from the guest tools ISO)
+    -  Attach the guest tools ISO to the VM from XOA
+    -  SSH into the VM, and elevate to root
+```
+mount /dev/cdrom /mnt
+bash /mnt/Linux/install.sh
+umount /dev/cdrom
+systemctl enable xe-linux-distribution.service
+systemctl start xe-linux-distribution.service
+```
+- RedHat
+    - This is available through the EPEL repo
+    - I am using RHEL 8
+```
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+yum -y update
+sudo yum -y install xe-guest-utilities-latest
+systemctl enable xe-linux-distribution.service
+systemctl start xe-linux-distribution.service
+```
+
 ## Virtual Machine Migration
 Virtual Machines can be migrated from a variety of sources. The vendor docs can be found at [Migrate to XCP-NG](https://xcp-ng.org/docs/migratetoxcpng.html) but I found that they were slightly lacking
 
