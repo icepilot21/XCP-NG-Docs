@@ -55,7 +55,7 @@ This installation has been validated against a fresh Debian 11 (Bullseye) x64 in
 - `Answer 1` if you want to install
 - `Answer 2` if you want to update
 
-#### Post Installation
+## Post Installation
 ### Install Guest Management Tools
 - Debian (Install from the guest tools ISO)
     -  Attach the guest tools ISO to the VM from XOA
